@@ -1,0 +1,217 @@
+\documentclass[11pt]{article}
+
+%
+\usepackage{fullpage}
+\setlength{\parindent}{0cm}
+\usepackage[margin=20pt]{geometry}
+
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[svgnames]{xcolor}
+\usepackage{datetime2}
+\usepackage{epstopdf}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{titlesec}
+\titlespacing*{\subsubsection}{0pt}{\baselineskip}{1ex}
+
+%\usepackage{}
+
+% https://tex.stackexchange.com/questions/13843/vertical-spacing-with-underbrace-command
+\usepackage{mathtools}
+
+% https://tex.stackexchange.com/questions/59517/label-rows-of-a-matrix-by-characters
+\usepackage{nicematrix}
+
+
+\usepackage{cancel}
+
+\usepackage{listings}
+\lstset{language=Python}
+
+%https://tex.stackexchange.com/questions/30619/what-is-the-best-symbol-for-vector-matrix-transpose
+\makeatletter
+\newcommand*{\T}{{\mathpalette\@T{}}}
+\newcommand*{\@T}[2]{\raisebox{\depth}{$\m@th#1\intercal$}}
+\makeatother
+
+% https://tex.stackexchange.com/questions/151984/double-vertical-bar-notation
+\usepackage{mathtools}
+\DeclarePairedDelimiterX{\KL}[2]{(}{)}{#1\,\delimsize\|\,#2}
+
+% https://latex.org/forum/viewtopic.php?t=10456
+\usepackage{titlesec}
+\titleformat{\subsubsection}[runin] % puts it in the same paragraph
+{\normalfont\bfseries}% formatting commands to apply to the whole heading
+{\thesubsubsection}% the label and number
+{}% space between label/number and subsection title
+{}% formatting commands applied just to subsection title
+[]% punctuation or other commands following subsection title
+
+
+\newcommand{\cN}{\scalebox{0.9}{\color{DarkBlue}\ensuremath{\mathcal{N}}}}
+\newcommand{\cD}{{\color{DarkBlue}\mathcal{D}}}
+\newcommand{\IP}{\mathbb{P}}
+\newcommand{\IE}{\mathbb{E}}
+\newcommand{\IN}{\mathbb{N}}
+\newcommand{\IR}{\mathbb{R}}
+\newcommand{\IC}{\mathbb{C}}
+\newcommand{\IZ}{\mathbb{Z}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cZ}{\mathcal{Z}}
+\newcommand{\norm}[2]{\|#1\|_{#2}}
+\newcommand{\scalar}[2]{\langle#1\rangle_{#2}}
+\newcommand{\from}{\colon}
+\newcommand{\given}{\hspace{0.5pt}|\hspace{0.5pt}}
+\newcommand{\slot}{{\hspace{0.5pt}\cdot\hspace{0.5pt}}}
+\newcommand{\Var}{\mathbb{V}}
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\TEXT}[1]{\quad\text{#1}\quad}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\vec}[1]{\pmb{#1}}
+\newcommand{\tr}{\mathop{\mathrm{tr}}}
+%\newcommand{\KL}{\mathop{\mathrm{KL}}}
+\let\oldrho\rho
+\renewcommand{\rho}{{\color{DarkBlue}\oldrho}}
+\def\[#1\]{\begin{align}\textstyle#1\end{align}}
+
+\renewcommand{\top}{{\color{red}\T}}
+
+% https://tex.stackexchange.com/questions/114113/how-to-label-text-with-equation-number
+\newcommand{\eqnum}{\leavevmode\hfill\refstepcounter{equation}\textup{{(\theequation)}}}
+
+\newcommand{\fact}[2]{%
+	\smash{
+		\color{gray}
+		\underbracket[0.1ex][1pt]{
+			\color{black}
+			\textstyle
+			\ensuremath{#1}%
+		}_{%
+			\text{#2}%
+		}
+	}
+}
+
+
+\begin{document}
+\href{https://github.com/numpde/probability_primer}{Probability primer}
+{\tiny\color{lightgray}\hfill{RA, \DTMnow}}
+
+
+\subsubsection*{Convergence.}
+
+Let $X, X_1, X_2, \ldots$ be rv.
+%
+Set $O_n^\varepsilon := \{ |X_n - X| > \varepsilon \}$.
+%
+Then $X_n \to X$
+\begin{itemize}
+\setlength\itemsep{-0em}
+\item
+	\makebox[3cm][l]{\emph{in mean}}
+	if
+	\quad
+	$
+		\int_0^\infty \IP(O_n^\varepsilon) \d\varepsilon
+		=
+		\IE[|X_n - X|]
+		\stackrel{\scalebox{0.4}{$n \to \infty$}}{\to}
+		0
+	$.
+	%
+	\hfill
+	For $g \geq 0$:
+	$
+		\int_E g \d\mu = \int_0^\infty		 \mu(E \cap \{g > t\}) \d{t}
+	$
+	
+\item
+	\makebox[3cm][l]{\emph{almost surely}}
+	if
+	\quad
+	$
+		\forall \varepsilon > 0 :
+		\IP(O_n^\varepsilon \cup O_{n + 1}^\varepsilon \cup \cdots)
+		\stackrel{\scalebox{0.4}{$n \to \infty$}}{\to}
+		0
+	$.
+	%
+	\hfill
+	$
+		\fact{
+			\IP(O_n \cup \cdots)
+			\stackrel{\scalebox{0.4}{$n \to \infty$}}{\to}
+			\IP(\cap_{n \geq 1} (O_n \cup \cdots))
+			=
+			\IP(X_n \stackrel{\scalebox{0.4}{$n \to \infty$}}{\to} X)
+		}{
+			b/c
+			$\lim \mu(\uparrow) = \mu(\cup \uparrow)$
+		}
+	$
+\item
+	\makebox[3cm][l]{\emph{in probability}}
+	if
+	\quad
+	$
+		\forall \varepsilon > 0 :
+		\IP(O_n^\varepsilon)
+		\stackrel{\scalebox{0.4}{$n \to \infty$}}{\to}
+		0
+	$.
+\item
+	\makebox[3cm][l]{\emph{in distribution}}
+	if
+	\quad
+	$
+		f(X_n) 
+		\stackrel{\scalebox{0.4}{$n \to \infty$}}{\to}
+		f(X)
+	$
+	\emph{i.m.}~%
+	for any cont bdd $f$.
+\end{itemize}
+%
+%
+$(\text{im} \vee \text{as}) \Rightarrow \text{ip} \Rightarrow \text{id}$.
+
+
+\subsubsection*{LLN \& CLT.}
+
+Let $X_1, X_2, \ldots$ iid, mean 0, std 1.
+%
+Set $Z_n := \frac1n \sum_{k \leq n} X_k$.
+%
+Then 
+$
+	Z_n
+	\to
+	0
+$
+\emph{a.s.}~%
+and
+%
+$
+	\sqrt{n} Z_n
+	\to
+	\cN(0, 1)
+$
+\emph{i.d.}
+
+
+
+\leavevmode\vfill
+\end{document}
+
+
+
+
+
+
+
